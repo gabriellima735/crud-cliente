@@ -1,0 +1,22 @@
+cliente -> compra -> produto
+
+(CRUD )
+cliente
+    id
+    nome
+    cpf
+    data nasc
+
+produto
+    id
+    nome
+    valor
+    qtd
+
+compra
+    id
+    clientId
+    produtoId
+    dataCompra(defalt.: data atual)
+    qtdVendido(obs.: não pode passar da quantidade no banco)
+    valorProduto
