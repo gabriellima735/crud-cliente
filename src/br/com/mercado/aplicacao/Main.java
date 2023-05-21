@@ -121,17 +121,21 @@ public class Main {
         int id = scn.nextInt();
         clienteDao.deleteByID(id);
     }
-    public static void exibirItemPeloID(ClienteDAO clienteDao, Scanner scn){
+    public static void exibirItemPeloID(ClienteDAO clienteDao, Scanner scn) {
         System.out.println("\n*** Buscar pelo id ***\n");
-        System.out.println("Qual id você que procurar:");
+        System.out.println("Qual id você quer procurar:");
         int proc = scn.nextInt();
 
-        System.out.println("ID | NOME | CELULAR | DATA ");
-        for(Cliente c : clienteDao.getClientePorID(proc)) {
-            System.out.println(" " + c.getId() +
-                    " | " + c.getNome() +
-                    " | " + c.getCelular() +
-                    " | " + c.getDesconto());
+        Cliente cliente = clienteDao.getClientePorID(proc);
+        if (cliente != null) {
+            System.out.println("ID | NOME | CELULAR | DATA ");
+            System.out.println(" " + cliente.getId() +
+                    " | " + cliente.getNome() +
+                    " | " + cliente.getCelular() +
+                    " | " + cliente.getDesconto());
+        } else {
+            System.out.println("Cliente não encontrado.");
         }
     }
+
 }

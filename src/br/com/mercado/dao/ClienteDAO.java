@@ -232,43 +232,29 @@ public class ClienteDAO {
     }
 
     // SEACH FOR ID
-    public List<Cliente> getClientePorID(int id){
-
+    public Cliente getClientePorID(int id) {
         String sql = "SELECT * FROM cliente WHERE id=?";
-
-        List<Cliente> clientes = new ArrayList<Cliente>();
-
         Connection conn = null;
         PreparedStatement pstm = null;
-
-        //Classe que vai recuperar os dados do banco """SELECT"""
         ResultSet rset = null;
+        Cliente cliente = null;
 
         try {
             conn = ConnectionFactory.createConectionToMySQL();
-
             pstm = (PreparedStatement) conn.prepareStatement(sql);
-
-            pstm.setInt(1,id);
-
+            pstm.setInt(1, id);
             rset = pstm.executeQuery();
 
-            while (rset.next()) {
-                Cliente cliente = new Cliente();
-                // recuperar o id
+            if (rset.next()) {
+                cliente = new Cliente();
                 cliente.setId(rset.getInt("id"));
-                // recuperar nome
                 cliente.setNome(rset.getString("nome"));
-                // recuperar celular
                 cliente.setCelular(rset.getInt("celular"));
-                // recuperar data de cadastro
                 cliente.setDesconto(rset.getBoolean("desconto"));
-
-                clientes.add(cliente);
             }
-        } catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
-        }finally{
+        } finally {
             try {
                 if (rset != null) {
                     rset.close();
@@ -283,8 +269,8 @@ public class ClienteDAO {
                 e.printStackTrace();
             }
         }
-        return clientes;
-
+        return cliente;
     }
+
 
 }
