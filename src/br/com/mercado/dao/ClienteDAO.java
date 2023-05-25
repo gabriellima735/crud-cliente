@@ -13,7 +13,8 @@ public class ClienteDAO {
 
     // CREATE
     public void save(Cliente cliente){
-        String sql = "INSERT INTO cliente(nome,celular,desconto) VALUES (?,?,?)";
+        String sql = "INSERT INTO cliente(nome, telefone, endereco, IsTorcedorFlamengo, IsFanOnePiece, IsSouza) " +
+                     "VALUES (?,?,?,?,?,?)";
         Connection conn = null;
         PreparedStatement pstm = null;
         try {
@@ -24,8 +25,11 @@ public class ClienteDAO {
             pstm = (PreparedStatement) conn.prepareStatement(sql);
             //Adicionar os valores que são esperados pela query
             pstm.setString(1, cliente.getNome());
-            pstm.setInt(2, cliente.getCelular());
-            pstm.setBoolean(3, cliente.getDesconto());
+            pstm.setInt(2, cliente.getTelefone());
+            pstm.setString(3, cliente.getEndereco());
+            pstm.setBoolean(4, cliente.getTorcedorFlamengo());
+            pstm.setBoolean(5, cliente.getFanOnePiece());
+            pstm.setBoolean(6, cliente.getSouza());
             // executa query
             pstm.execute();
         } catch (Exception e){
@@ -44,7 +48,6 @@ public class ClienteDAO {
             }
         }
     }
-
     // READ
     public List<Cliente> getCliente(){
         String sql = "SELECT * FROM cliente";
@@ -58,21 +61,18 @@ public class ClienteDAO {
 
         try {
             conn = ConnectionFactory.createConectionToMySQL();
-
             pstm = (PreparedStatement) conn.prepareStatement(sql);
-
             rset = pstm.executeQuery();
             while (rset.next()) {
                 Cliente cliente = new Cliente();
-                // recuperar o id
-                cliente.setId(rset.getInt("id"));
-                // recuperar nome
-                cliente.setNome(rset.getString("nome"));
-                // recuperar Celular
-                cliente.setCelular(rset.getInt("celular"));
-                // recuperar data de cadastro
-                cliente.setDesconto(rset.getBoolean("desconto"));
 
+                cliente.setId(rset.getInt("idCliente"));
+                cliente.setNome(rset.getString("nome"));
+                cliente.setTelefone(rset.getInt("telefone"));
+                cliente.setEndereco(rset.getString("endereco"));
+                cliente.setTorcedorFlamengo(rset.getBoolean("IsTorcedorFlamengo"));
+                cliente.setFanOnePiece(rset.getBoolean("IsFanOnePiece"));
+                cliente.setSouza(rset.getBoolean("IsSouza"));
                 clientes.add(cliente);
             }
             } catch(Exception e){
@@ -93,35 +93,33 @@ public class ClienteDAO {
                 }
             }
         return clientes;
-
     }
-
-    // UPDATE
+    //UPDATE
     public void update(Cliente cliente){
-        String sql = "UPDATE cliente SET nome = ?, celular = ?, desconto = ? WHERE id = ?";
-
+        String sql = "UPDATE cliente SET nome = ?, telefone = ?, endereco = ?, " +
+                     "isTorcedorFlamengo = ?, isFanOnePiece = ?, isSouza = ? " +
+                     "WHERE idCliente = ?";
         Connection conn = null;
         PreparedStatement pstm = null;
-
         try {
             //Criar conexão com o banco
             conn = ConnectionFactory.createConectionToMySQL();
-
             //Criar a classe para eecutar a query
             pstm = (PreparedStatement) conn.prepareStatement(sql);
 
             //Adicionar os valores para atualizar
             pstm.setString(1, cliente.getNome());
-            pstm.setInt(2, cliente.getCelular());
-            pstm.setBoolean(3, cliente.getDesconto());
+            pstm.setInt(2, cliente.getTelefone());
+            pstm.setString(3, cliente.getEndereco());
+            pstm.setBoolean(4, cliente.getTorcedorFlamengo());
+            pstm.setBoolean(5, cliente.getFanOnePiece());
+            pstm.setBoolean(6, cliente.getSouza());
 
             //Qual o ID do registro que deseja atualizar?
-            pstm.setInt(4, cliente.getId());
+            pstm.setInt(7, cliente.getId());
 
             //Executar a query
             pstm.execute();
-
-
         } catch (Exception e){
             e.printStackTrace();
 
@@ -138,23 +136,18 @@ public class ClienteDAO {
             }
         }
     }
-
-    // DELETE
+    //DELETE
     public void deleteByID(int id){
 
-        String sql = "DELETE FROM cliente WHERE id=?";
+        String sql = "DELETE FROM cliente WHERE idCliente = ?";
 
         Connection conn = null;
-
         PreparedStatement pstm = null;
 
         try {
             conn = ConnectionFactory.createConectionToMySQL();
-
             pstm = conn.prepareStatement(sql);
-
             pstm.setInt(1,id);
-
             pstm.execute();
 
         } catch (Exception e){
@@ -173,9 +166,7 @@ public class ClienteDAO {
         }
 
     }
-
-    // -------------------------------------------------------
-    // SEACH FOR NAME
+    // Busca por nome
     public List<Cliente> getClientePorNome(String nome){
 
         String sql = "SELECT * FROM cliente WHERE nome=?";
@@ -184,31 +175,27 @@ public class ClienteDAO {
 
         Connection conn = null;
         PreparedStatement pstm = null;
-
         //Classe que vai recuperar os dados do banco """SELECT"""
         ResultSet rset = null;
 
         try {
             conn = ConnectionFactory.createConectionToMySQL();
-
             pstm = (PreparedStatement) conn.prepareStatement(sql);
-
             pstm.setString(1,nome);
-
             rset = pstm.executeQuery();
 
             while (rset.next()) {
                 Cliente cliente = new Cliente();
-                // recuperar o id
-                cliente.setId(rset.getInt("id"));
-                // recuperar nome
-                cliente.setNome(rset.getString("nome"));
-                // recuperar celular
-                cliente.setCelular(rset.getInt("celular"));
-                // recuperar data de cadastro
-                cliente.setDesconto(rset.getBoolean("desconto"));
 
+                cliente.setId(rset.getInt("idCliente"));
+                cliente.setNome(rset.getString("nome"));
+                cliente.setTelefone(rset.getInt("telefone"));
+                cliente.setEndereco(rset.getString("endereco"));
+                cliente.setTorcedorFlamengo(rset.getBoolean("IsTorcedorFlamengo"));
+                cliente.setFanOnePiece(rset.getBoolean("IsFanOnePiece"));
+                cliente.setSouza(rset.getBoolean("IsSouza"));
                 clientes.add(cliente);
+
             }
         } catch(Exception e){
             e.printStackTrace();
@@ -228,12 +215,10 @@ public class ClienteDAO {
             }
         }
         return clientes;
-
     }
-
-    // SEACH FOR ID
+    // Busca por ID
     public Cliente getClientePorID(int id) {
-        String sql = "SELECT * FROM cliente WHERE id=?";
+        String sql = "SELECT * FROM cliente WHERE idCliente=?";
         Connection conn = null;
         PreparedStatement pstm = null;
         ResultSet rset = null;
@@ -247,10 +232,13 @@ public class ClienteDAO {
 
             if (rset.next()) {
                 cliente = new Cliente();
-                cliente.setId(rset.getInt("id"));
+                cliente.setId(rset.getInt("idCliente"));
                 cliente.setNome(rset.getString("nome"));
-                cliente.setCelular(rset.getInt("celular"));
-                cliente.setDesconto(rset.getBoolean("desconto"));
+                cliente.setTelefone(rset.getInt("telefone"));
+                cliente.setEndereco(rset.getString("endereco"));
+                cliente.setTorcedorFlamengo(rset.getBoolean("IsTorcedorFlamengo"));
+                cliente.setFanOnePiece(rset.getBoolean("IsFanOnePiece"));
+                cliente.setSouza(rset.getBoolean("IsSouza"));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -271,6 +259,5 @@ public class ClienteDAO {
         }
         return cliente;
     }
-
 
 }

@@ -4,8 +4,11 @@ public class Cliente {
 
     private int id;
     private String nome;
-    private int celular;
-    private boolean desconto;
+    private int telefone;
+    private String endereco;
+    private boolean isTorcedorFlamengo;
+    private boolean isFanOnePiece;
+    private boolean isSouza;
 
     public int getId() {
         return id;
@@ -23,20 +26,44 @@ public class Cliente {
         this.nome = nome;
     }
 
-    public int getCelular() {
-        return celular;
+    public int getTelefone() {
+        return telefone;
     }
 
-    public void setCelular(int celular) {
-        this.celular = celular;
+    public void setTelefone(int telefone) {
+        this.telefone = telefone;
     }
 
-    public boolean getDesconto() {
-        return desconto;
+    public String getEndereco() {
+        return endereco;
     }
 
-    public void setDesconto(boolean desconto) {
-        this.desconto = desconto;
+    public void setEndereco(String endereco) {
+        this.endereco = endereco;
+    }
+
+    public boolean getTorcedorFlamengo() {
+        return isTorcedorFlamengo;
+    }
+
+    public void setTorcedorFlamengo(boolean torcedorFlamengo) {
+        isTorcedorFlamengo = torcedorFlamengo;
+    }
+
+    public boolean getFanOnePiece() {
+        return isFanOnePiece;
+    }
+
+    public void setFanOnePiece(boolean fanOnePiece) {
+        isFanOnePiece = fanOnePiece;
+    }
+
+    public boolean getSouza() {
+        return isSouza;
+    }
+
+    public void setSouza(boolean souza) {
+        isSouza = souza;
     }
 
 }
